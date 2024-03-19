@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     int count = 0;
     public StarterAssetsInputs Player;
     public GameObject ObjectiveUIOBJ, TrailCanvas;
+    public GameObject CompletePanel;
     public void Failed()
     {
         FadePanel.DOFade(1, 0.5f);
@@ -31,7 +32,12 @@ public class GameManager : MonoBehaviour
     {
         Player.SetCursorState(state);
     }    
-
+    public void Complete()
+    {
+        CompletePanel.SetActive(true);
+        Nurse.gameObject.SetActive(false);
+        MouseState(false);
+    }
     private void Start()
     {
         if (PlayerPrefs.GetInt("Again") == 0)
