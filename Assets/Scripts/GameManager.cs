@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         Mainmenu.SetActive(false);
         MainMenuEnv.SetActive(false);
+        PlayerCamera.SetActive(true);
         yield return new WaitForSeconds(1f);
         FadePanel.DOFade(0, 0.5f);
         ObjectiveUIOBJ.SetActive(true);
