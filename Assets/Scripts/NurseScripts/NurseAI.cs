@@ -102,7 +102,7 @@ public class NurseAI : MonoBehaviour
                 CloseMusic.Stop();
                 CloseMusic.volume = 0;
             }
-            agent.speed = 3;
+            agent.speed = 3.5f;
             agent.SetDestination(target.position);
             _animator.SetBool("Run", true);
             waiting = false;
