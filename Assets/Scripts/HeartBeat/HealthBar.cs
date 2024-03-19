@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class HealthBar : MonoBehaviour
 {
-    public Transform target;
+    public GameObject LinePrefab;
+    Transform target;
+    public RectTransform startPosition;
+    public RectTransform endPos;
     private TrailRenderer trailRenderer;
     public float straightDuration = 2f;
     public float pulseDuration = 1f;
@@ -12,18 +15,11 @@ public class HealthBar : MonoBehaviour
     public float pulsespeed;
     public float amplitude = 1f;
     public float frequency = 5f;
-    private Vector3 startPosition;
-    public RectTransform endPos;
     private float timer = 0f;
     private bool isStraight = true;
     public Color FullHealth;
     public Color MidHealth;
     public Color LowHealth;
-    void Start()
-    {
-        trailRenderer = target.GetComponent<TrailRenderer>();
-        startPosition = target.position;
-    }
     void Update()
     {
         timer += Time.deltaTime;
@@ -57,7 +53,7 @@ public class HealthBar : MonoBehaviour
         {
             timer = 0f;
             isStraight = true;
-            target.position = startPosition;
+            //target.position = startPosition;
         }
     }
 }
