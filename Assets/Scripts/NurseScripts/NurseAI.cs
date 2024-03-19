@@ -18,6 +18,7 @@ public class NurseAI : MonoBehaviour
     public float fieldOfViewAngle = 45f;
     public float closeRangeThreshold = 5f;
     public bool playerInSafeZone = false;
+    bool _canDeal = true;
     private enum AIState
     {
         Patrol,
@@ -64,7 +65,6 @@ public class NurseAI : MonoBehaviour
             }
         }
     }
-
     void Chase()
     {
         if(!playerInSafeZone)
@@ -73,11 +73,23 @@ public class NurseAI : MonoBehaviour
             agent.SetDestination(target.position);
             _animator.SetBool("Run", true);
             waiting = false;
+            if(_canDeal)
+            {
+                StartCoroutine(Chase_Damage());
+            }
         }
         else
         {
             currentState = AIState.Patrol;
         }
+    }
+
+    IEnumerator Chase_Damage()
+    {
+        _canDeal = false;
+        yield return new WaitForSeconds(1f);
+        target.GetComponent<Health>().DealDamage(1);
+        _canDeal = true;
     }
 
     IEnumerator Look_Delay()

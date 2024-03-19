@@ -141,7 +141,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0.6392157, b: 0, a: 0.53333336}
+      key0: {r: 0, g: 0.6392157, b: 0, a: 0.63529414}
       key1: {r: 0, g: 0.6392157, b: 0, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -174,7 +174,7 @@ TrailRenderer:
     alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}
-    shadowBias: 0.5
+    shadowBias: 0
     generateLightingData: 0
   m_MinVertexDistance: 0
   m_MaskInteraction: 0

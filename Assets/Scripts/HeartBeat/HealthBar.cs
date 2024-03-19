@@ -6,6 +6,7 @@ public class HealthBar : MonoBehaviour
 {
     public GameObject LinePrefab;
     Transform target;
+    public Transform Parent;
     public RectTransform startPosition;
     public RectTransform endPos;
     private TrailRenderer trailRenderer;
@@ -21,49 +22,94 @@ public class HealthBar : MonoBehaviour
     public Color MidHealth;
     public Color LowHealth;
 
-
+    private void Start()
+    {
+        InstantiateLine();
+    }
     public void InstantiateLine()
     {
-        GameObject g = Instantiate(LinePrefab,startPosition.position,Quaternion.identity);
+        GameObject g = Instantiate(LinePrefab,startPosition.position,Quaternion.identity, Parent);
         target = g.transform;
+        trailRenderer = target.GetComponent<TrailRenderer>();
     }
 
     void Update()
     {
-        timer += Time.deltaTime;
-        if (isStraight)
+        if(target)
         {
-            float xOffset = normalspeed * Time.deltaTime;
-            Vector3 newPosition = target.position + new Vector3(xOffset, 0f, 0f);
-            target.position = newPosition;
-            if (timer >= straightDuration)
+            timer += Time.deltaTime;
+            if (isStraight)
             {
-                timer = 0f;
-                isStraight = false;
+                float xOffset = normalspeed * Time.deltaTime;
+                Vector3 newPosition = target.position + new Vector3(xOffset, 0f, 0f);
+                target.position = newPosition;
+                if (timer >= straightDuration)
+                {
+                    timer = 0f;
+                    isStraight = false;
+                }
             }
-        }
-        else
-        {
-            float xOffset = pulsespeed * Time.deltaTime;
-            float yOffset = Mathf.Sin(frequency * timer * Mathf.PI * 2f) * amplitude * Time.deltaTime;
-
-            Vector3 newPosition = target.position + new Vector3(xOffset, yOffset, 0f);
-
-            target.position = newPosition;
-
-            if (timer >= pulseDuration)
+            else
             {
-                timer = 0f;
-                isStraight = true;
+                float xOffset = pulsespeed * Time.deltaTime;
+                float yOffset = Mathf.Sin(frequency * timer * Mathf.PI * 2f) * amplitude * Time.deltaTime;
+
+                Vector3 newPosition = target.position + new Vector3(xOffset, yOffset, 0f);
+
+                target.position = newPosition;
+
+                if (timer >= pulseDuration)
+                {
+                    timer = 0f;
+                    isStraight = true;
+                }
             }
         }
         if(target.position.x>endPos.position.x)
         {
             timer = 0f;
             isStraight = true;
-            Destroy(target);
+            GameObject g = target.gameObject;
+            Destroy(g,2f);
             InstantiateLine();
             //target.position = startPosition;
         }
+    }
+
+    public void HealthStateNormal()
+    {
+        trailRenderer.startColor = FullHealth;
+        trailRenderer.endColor = FullHealth;
+        pulseDuration = 1;
+        straightDuration = 2;
+        frequency = 1;
+    }
+    public void HealthStateCausious()
+    {
+        trailRenderer.startColor = MidHealth;
+        trailRenderer.endColor = MidHealth;
+        pulseDuration = 2;
+        straightDuration = 1;
+        frequency = 1;
+        amplitude = 300;
+    }
+    public void HealthStateDanger()
+    {
+        trailRenderer.startColor = MidHealth;
+        trailRenderer.endColor = MidHealth;
+        pulseDuration = 9;
+        straightDuration = 1;
+        frequency = 1;
+        amplitude = 300;
+    }
+
+    public void HealthStateDead()
+    {
+        trailRenderer.startColor = MidHealth;
+        trailRenderer.endColor = MidHealth;
+        pulseDuration = 0;
+        straightDuration = 1;
+        frequency = 1;
+        amplitude = 0;
     }
 }

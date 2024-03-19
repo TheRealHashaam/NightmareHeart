@@ -14,7 +14,6 @@ public class InteractionScript : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, interactionDistance))
         {
-            Debug.LogError(hit.collider.gameObject.name);
             IInteractable interactable = hit.collider.gameObject.GetComponent<IInteractable>();
             if (interactable != null)
             {
