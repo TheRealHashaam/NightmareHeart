@@ -3,9 +3,11 @@ using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -33,9 +35,43 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        OpenMainMenu();
+        if (PlayerPrefs.GetInt("Again") == 0)
+        {
+            OpenMainMenu();
+        }
+        else
+        {
+            StartGame();
+        }
+        
+    }
+    public void QuitGame()
+    {
+        PlayerPrefs.SetInt("Again", 0);
+        FadePanel.DOFade(1, 0.5f);
+        StartCoroutine(Quit_Delay());
+    }
+    IEnumerator Quit_Delay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Application.Quit();
+    }
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetInt("Again", 0);
+    }
+    public void PlayAgain()
+    {
+        PlayerPrefs.SetInt("Again", 1);
+        FadePanel.DOFade(1, 0.5f);
+        StartCoroutine(Restart_Delay());
     }
 
+    IEnumerator Restart_Delay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        SceneManager.LoadScene(0);
+    }
     void OpenMainMenu()
     {
         FadePanel.DOFade(0, 0.5f);

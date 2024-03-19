@@ -6,6 +6,7 @@ public class KeyPick : MonoBehaviour, IInteractable
 {
     public GameObject keyPick;
     private bool isPlayerInside = false;
+    public Rigidbody ExitDoor;
     public void Pickup()
     {
         if (keyPick != null)
@@ -13,6 +14,7 @@ public class KeyPick : MonoBehaviour, IInteractable
             Destroy(keyPick);
             Destroy(this.gameObject);
             FindObjectOfType<GameManager>().UpdateObjective();
+            ExitDoor.isKinematic = false;
         }
     }
     public void Interact()

@@ -26,6 +26,7 @@ public class Door : MonoBehaviour, IInteractable
         {
             Rigidbodies[i].isKinematic = false;
         }
+        FindObjectOfType<GameManager>().UpdateObjective();
     }
 
     public void Interact()

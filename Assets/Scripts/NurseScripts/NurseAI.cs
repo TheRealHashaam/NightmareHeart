@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviorTree;
 using UnityEngine.AI;
+using DG.Tweening;
 public class NurseAI : MonoBehaviour
 {
     private NavMeshAgent agent;
@@ -19,6 +20,8 @@ public class NurseAI : MonoBehaviour
     public float closeRangeThreshold = 5f;
     public bool playerInSafeZone = false;
     bool _canDeal = true;
+    public AudioSource ChaseMusic;
+    public AudioSource CloseMusic;
     private enum AIState
     {
         Patrol,
@@ -64,11 +67,33 @@ public class NurseAI : MonoBehaviour
                 waitCoroutine = StartCoroutine(WaitBeforeNextDestination(randomDirection));
             }
         }
+        float distance = Vector3.Distance(transform.position, target.position);
+
+        if (distance < 30f)
+        {
+            if(!CloseMusic.isPlaying)
+            {
+                CloseMusic.Play();
+                CloseMusic.DOFade(1, 1f);
+            }
+            if (distance < 20)
+            {
+                CloseMusic.DOPitch(0.5f, 1f);
+            }
+        }
+        
     }
     void Chase()
     {
         if(!playerInSafeZone)
         {
+            if(!ChaseMusic.isPlaying)
+            {
+                ChaseMusic.DOFade(1, 0.5f);
+                ChaseMusic.Play();
+                CloseMusic.Stop();
+                CloseMusic.volume = 0;
+            }
             agent.speed = 3;
             agent.SetDestination(target.position);
             _animator.SetBool("Run", true);
@@ -81,6 +106,10 @@ public class NurseAI : MonoBehaviour
         else
         {
             currentState = AIState.Patrol;
+            ChaseMusic.DOFade(0, 0.5f).OnComplete(() => 
+            {
+                ChaseMusic.Stop();
+            });
         }
     }
 
@@ -94,6 +123,7 @@ public class NurseAI : MonoBehaviour
 
     IEnumerator Look_Delay()
     {
+        ChaseMusic.Play();
         agent.SetDestination(transform.position);
         _animator.SetBool("Idle", true);
         yield return new WaitForSeconds(0.5f);
