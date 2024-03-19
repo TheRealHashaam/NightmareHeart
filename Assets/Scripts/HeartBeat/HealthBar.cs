@@ -20,6 +20,14 @@ public class HealthBar : MonoBehaviour
     public Color FullHealth;
     public Color MidHealth;
     public Color LowHealth;
+
+
+    public void InstantiateLine()
+    {
+        GameObject g = Instantiate(LinePrefab,startPosition.position,Quaternion.identity);
+        target = g.transform;
+    }
+
     void Update()
     {
         timer += Time.deltaTime;
@@ -53,6 +61,8 @@ public class HealthBar : MonoBehaviour
         {
             timer = 0f;
             isStraight = true;
+            Destroy(target);
+            InstantiateLine();
             //target.position = startPosition;
         }
     }
