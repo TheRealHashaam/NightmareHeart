@@ -81,6 +81,14 @@ public class NurseAI : MonoBehaviour
                 CloseMusic.DOPitch(0.5f, 1f);
             }
         }
+        if(playerInSafeZone|| distance > 30f)
+        {
+            CloseMusic.Play();
+            CloseMusic.DOFade(0, 1f).OnComplete(() =>
+            {
+                CloseMusic.Stop();
+            });
+        }
         
     }
     void Chase()
@@ -101,6 +109,12 @@ public class NurseAI : MonoBehaviour
             if(_canDeal)
             {
                 StartCoroutine(Chase_Damage());
+            }
+            float distance = Vector3.Distance(transform.position, target.position);
+
+            if (distance < 2f)
+            {
+                FindObjectOfType<GameManager>().PlayAgain();
             }
         }
         else
