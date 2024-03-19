@@ -20,7 +20,6 @@ public class QTEManager : MonoBehaviour
     public float targetTime = 180f;
     private float currentTime;
     public bool timer;
-    public Button QTEBUtton;
     [System.Serializable]
     public struct KeyType
     {
@@ -33,7 +32,6 @@ public class QTEManager : MonoBehaviour
         AllowQTE = false;
         currentTime = targetTime;
         timer = true;
-        QTEBUtton.interactable = false;
     }
 
     private void Update()
@@ -48,7 +46,6 @@ public class QTEManager : MonoBehaviour
                 currentTime = 0;
                 count = 0;
                 AllowQTE = true;
-                QTEBUtton.interactable = true;
             }
         }
 
