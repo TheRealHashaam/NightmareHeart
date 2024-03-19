@@ -55,6 +55,8 @@ public class HealthBar : MonoBehaviour
         }
         if(target.position.x>endPos.position.x)
         {
+            timer = 0f;
+            isStraight = true;
             target.position = startPosition;
         }
     }

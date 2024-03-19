@@ -17,7 +17,7 @@ public class NurseAI : MonoBehaviour
     public float detectionRange = 10f;
     public float fieldOfViewAngle = 45f;
     public float closeRangeThreshold = 5f;
-    private bool playerInSafeZone = false;
+    public bool playerInSafeZone = false;
     private enum AIState
     {
         Patrol,
@@ -51,6 +51,7 @@ public class NurseAI : MonoBehaviour
     void Patrol()
     {
         agent.speed = 2;
+        _animator.SetBool("Run", false);
         if (!waiting)
         {
             if (!agent.pathPending && agent.remainingDistance < 0.5f)
@@ -87,6 +88,7 @@ public class NurseAI : MonoBehaviour
         _animator.SetTrigger("Look");
         yield return new WaitForSeconds(2f);
         currentState = AIState.Chase;
+        _animator.ResetTrigger("Look");
     }
 
     private IEnumerator WaitBeforeNextDestination(Vector3 randomDirection)
@@ -106,32 +108,21 @@ public class NurseAI : MonoBehaviour
 
     private void DetectTarget()
     {
-        Vector3 directionToTarget = target.position - transform.position;
-        float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
-
-        // Check if target is within detection range and within the AI's field of view
-        if (directionToTarget.magnitude < detectionRange && angleToTarget < fieldOfViewAngle / 2f)
+        if(!playerInSafeZone)
         {
-            RaycastHit hit;
-
-            // Perform a raycast to check if there are obstacles between the AI and the target
-            if (Physics.Raycast(transform.position, directionToTarget, out hit, detectionRange))
+            Vector3 directionToTarget = target.position - transform.position;
+            float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
+            if (directionToTarget.magnitude < detectionRange && angleToTarget < fieldOfViewAngle / 2f)
             {
-                if (hit.collider.gameObject == target.gameObject)
-                {
-                    // Target detected, transition to chase state
-                    currentState = AIState.Chase;
-                    return;
-                }
+                currentState = AIState.Chase;
+                return;
+            }
+            if (directionToTarget.magnitude < closeRangeThreshold && angleToTarget > 90f)
+            {
+                StartCoroutine(Look_Delay());
             }
         }
 
-        // Check if target is very close regardless of the direction
-        if (directionToTarget.magnitude < closeRangeThreshold)
-        {
-            StartCoroutine(Look_Delay());
-            
-        }
     }
 
 
