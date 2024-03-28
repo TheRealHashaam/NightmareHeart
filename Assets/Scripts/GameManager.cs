@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public StarterAssetsInputs Player;
     public GameObject ObjectiveUIOBJ, TrailCanvas;
     public GameObject CompletePanel;
+    public AudioSource BGM;
     public void Failed()
     {
         FadePanel.DOFade(1, 0.5f);

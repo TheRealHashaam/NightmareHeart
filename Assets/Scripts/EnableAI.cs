@@ -9,7 +9,7 @@ public class EnableAI : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            Nurse.SetActive(true);
+            Nurse.GetComponent<NurseAI>().enabled = true;
             Destroy(this.gameObject);
         }
     }
